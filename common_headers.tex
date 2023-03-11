@@ -165,6 +165,11 @@ headsep=3mm,
 }
 \makeatother
 
+%%% We select if we want to show NABC. Here, we don't.
+
+\gresetnabc{1}{invisible}
+\gresetnabc{2}{invisible}
+
 %%%%%%%%%%%%%%% FONTS %%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%% Main font
@@ -257,6 +262,10 @@ headsep=3mm,
 
 %% Macro to print the common rubric that signals the Te Deum
 \newcommand{\tedeumrubric}{\rubric{Lectione ultima peracta Hymnus \normaltext{Te Deum} cantatur.}}
+
+%% Macro to print a separator
+
+\newcommand{\sep}{{\centering\greseparator{3}{20}\par}}
 
 %%%%%%%%%%%%%%% COLUMN MANAGEMENT %%%%%%%%%%%%%%%
 
@@ -401,12 +410,12 @@ headsep=3mm,
 }
 
 \newcommand{\smalltitle}[1]{
-  \needspace{5\baselineskip}
+  \needspace{7\baselineskip}
   \par{\centering\textbf{#1}\par}
 }
 
 \newcommand{\intermediatetitle}[1]{
-  \needspace{8\baselineskip}
+  \needspace{10\baselineskip}
   \begin{center}
   {\large #1}
   \end{center}
