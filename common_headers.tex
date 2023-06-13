@@ -41,6 +41,11 @@
 %\setdefaultlanguage[variant=ecclesiastic, hyphenation=liturgical, usej=true, babelshorthands=false]{latin}
 \setdefaultlanguage[variant=french, frenchitemlabels=false]{french}
 \setotherlanguage{english}
+%% this latin option basically boils down to French with slightly thinner pre-punctuation spaces 
+%% and slightly different hyphenation (but how different?)
+%% for some reason, it produces more underfull hboxes in two-col psalms, than French; and about 0.5% more pages.
+%% French is therefore to be kept until further notice.
+%\setotherlanguage[variant=ecclesiastic, hyphenation=liturgical, usej=true]{latin}
 
 %%%%%%%%%%%%%%% GEOMETRY %%%%%%%%%%%%%%%
 
