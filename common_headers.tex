@@ -89,6 +89,11 @@ headsep=3mm,
 
 \usepackage[forcecompile]{gregoriotex}
 
+%% this limits how much scores can stretch vertically
+%% when they are forced to adhere to the bottom of a page (i.e followed by \pagebreak)
+%\grechangedim{baselineskip}{55pt plus 1pt minus 5pt}{scalable}
+%% this however has been found to break the page layout of the psalterium festivum, somehow
+
 %% text above lines shall be of color gregoriocolor
 \grechangestyle{abovelinestext}{\color{gregoriocolor}\footnotesize\itshape}
 %% fine-tuning of space beween the staff and the text above lines
@@ -103,6 +108,12 @@ headsep=3mm,
 %% fine-tuning of space between the initial and the annotations
 \newcommand{\annraise}{0mm} %% default is -0.2mm
 \grechangedim{annotationraise}{\annraise}{scalable}
+
+%% fine-tuning the behavior of text placed under bars. We use the so-called "new algorithm" which
+%% places the bar in the middle of surrounding notes, and the text in the middle of surrounding text.
+%% however, we restrict drastically the deviation of the text from the position of the bar.
+\grechangedim{maxbaroffsettextleft}{0.5mm}{scalable}
+\grechangedim{maxbaroffsettextright}{0.5mm}{scalable}
 
 %% in case we show NABC, font selection
 \gresetnabcfont{gresgmodern}{12} 
@@ -152,6 +163,7 @@ headsep=3mm,
   
   %% this prevents page breaks between the phantom section and its label, and the actual score.
   \needspace{4\baselineskip} 
+%  \vspace{0mm plus 10mm} %% allow latex to insert some space above the score if it really wants to
   \protected@edef\@currentlabelname{#5}
   \phantomsection
   \label{#2}
