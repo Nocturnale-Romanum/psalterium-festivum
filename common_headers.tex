@@ -298,14 +298,8 @@ headsep=3mm,
 \setlength\columnseprule{0.4pt}
 \setlength{\multicolsep}{6pt plus 2pt minus 1.5pt}
 
-%% Macro to print a psalm on two columns.
-\newcommand{\psalmus}[2]{
-	\vspace{0.5\baselineskip}
-	\needspace{5\baselineskip}
-	\phantomsection
-	\label{Psalm#1_#2}
-	\index[P]{#1 (mode #2)}
-	\smalltitle{Psalmus #1}
+%% Macro to print an itemized list on two columns (psalm, canticle, etc) from a tex file
+\newcommand{\twocolitemized}[1]{
 	\begin{multicols}{2}
 	\begin{itemize}[
 		label=\null, 
@@ -316,9 +310,44 @@ headsep=3mm,
 		rightmargin=0pt, 
 		parsep=0pt, 
 		itemsep=0pt plus 1pt]
-	\input{nocturnale-romanum/psalmi/#1_#2.tex}
+	\input{#1}
 	\end{itemize}
 	\end{multicols}
+}
+
+%% Macro to print a psalm on two columns with the title "psalmus N".
+\newcommand{\psalmus}[3][]{
+	%% #1, passed as option, label or blank.
+	%% Every psalm_tone combination should be printed once with label, and the other times without label.
+	%% #2, psalm number
+	%% #3, tone
+	\vspace{0.5\baselineskip}
+	\needspace{5\baselineskip}
+	\phantomsection
+	\ifblank{#1}{}{\label{Psalm#2_#3}}
+	\index[P]{#2 (mode #3)}
+	\smalltitle{Psalmus #2}
+	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}
+}
+
+%% Macro to print a psalm on two columns with the title "in tono N"
+\newcommand{\psalmustonus}[3][]{
+	%% #1, passed as option, label or blank.
+	%% Every psalm_tone combination should be printed once with label, and the other times without label.
+	%% #2, psalm number
+	%% #3, tone
+	\vspace{0.5\baselineskip}
+	\needspace{3\baselineskip}
+	\phantomsection
+	\ifblank{#1}{}{\label{Psalm#2_#3}}
+	\index[P]{#2 (mode #3)}
+	\smalltitle{in tono #3}
+	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}
+}
+
+%% Macro to reference a psalm printed elsewhere
+\newcommand{\psalmusref}[2]{
+	\rubric{Psalmus \normaltext{#1} in tono \normaltext{#2}, pag.\ \pageref{M-Psalm#1_#2}.}\par
 }
 
 \newcommand{\twocolrubric}[2]{
