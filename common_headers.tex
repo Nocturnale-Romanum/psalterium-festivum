@@ -299,7 +299,7 @@ headsep=3mm,
 
 %% Macro to print an itemized list on two columns (psalm, canticle, etc) from a tex file
 \newcommand{\twocolitemized}[1]{
-	\begin{multicols}{2}
+	\begin{multicols}{2}%
 	\begin{itemize}[
 		label=\null, 
 		leftmargin=0pt, 
@@ -309,9 +309,9 @@ headsep=3mm,
 		rightmargin=0pt, 
 		parsep=0pt, 
 		itemsep=0pt plus 1pt]
-	\input{#1}
-	\end{itemize}
-	\end{multicols}
+	\input{#1}%
+	\end{itemize}%
+	\end{multicols}%
 }
 
 %% Macro to print a psalm on two columns with the title "psalmus N".
@@ -326,7 +326,7 @@ headsep=3mm,
 	\ifblank{#1}{}{\label{Psalm#2_#3}}
 	\index[P]{#2 (mode #3)}
 	\smalltitle{Psalmus #2}
-	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}
+	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}%
 }
 
 %% Macro to print a psalm on two columns with the title "in tono N"
@@ -341,7 +341,7 @@ headsep=3mm,
 	\ifblank{#1}{}{\label{Psalm#2_#3}}
 	\index[P]{#2 (mode #3)}
 	\smalltitle{in tono #3}
-	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}
+	\twocolitemized{nocturnale-romanum/psalmi/#2_#3.tex}%
 }
 
 %% Macro to reference a psalm printed elsewhere
