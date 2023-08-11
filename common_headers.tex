@@ -2,14 +2,28 @@
 
 \usepackage{imakeidx}
 
+%% This is deep magic required to make dotted_mode.ist work.
+%% Found in https://tex.stackexchange.com/questions/594568/how-to-integrate-a-tabular-environment-in-the-index
+\setlength{\columnseprule}{0.4pt}
+\newsavebox\ltmcbox
+\newlength\mysavecolroom
+%% This is added before automatically-inserted instances of \\ in longtable-based indices in order to ignore those
+\newcommand{\ignoreNL}[1]{} 
+%% This is a special macro to be used for explicit newlines
+%% inside indices where a tabular is used,
+%% which are indices where the mode is printed,
+%% to be used in the indexed value (i.e. the piece's title)
+\newcommand{\idxnewline}{\newline\null\hspace{4mm}}
+%% a simple newline\null can be added if it is at the end of the title.
+
 \indexsetup{level=\section*,toclevel=section,noclearpage,othercode=\footnotesize\thispagestyle{empty}}
-\makeindex[name=I,title=Index Invitatoriorum, columns=2,columnseprule]
-\makeindex[name=H,title=Index Hymnorum, columns=2,columnseprule]
-\makeindex[name=A,title=Index Antiphonarum, columns=2,columnseprule]
-\makeindex[name=R,title=Index Responsoriorum, columns=2,columnseprule]
-\makeindex[name=P,title=Index Psalmorum, columns=2,columnseprule]
-\makeindex[name=T,title=Toni Communes, columns=2,columnseprule]
-\makeindex[name=F,title=Index Festorum, columns=2,columnseprule]
+\makeindex[name=I,title=Index Invitatoriorum, columns=2,columnseprule, options=-s dotted_mode.ist]
+\makeindex[name=H,title=Index Hymnorum, columns=2,columnseprule, options=-s dotted_thinmode.ist]
+\makeindex[name=A,title=Index Antiphonarum, columns=2,columnseprule, options=-s dotted_mode.ist]
+\makeindex[name=R,title=Index Responsoriorum, columns=2,columnseprule, options=-s dotted.ist]
+\makeindex[name=P,title=Index Psalmorum, columns=2,columnseprule, options=-s dotted.ist]
+\makeindex[name=T,title=Toni Communes, columns=2,columnseprule, options=-s dotted.ist]
+\makeindex[name=F,title=Index Festorum, columns=2,columnseprule, options=-s dotted.ist]
 
 %%%%%%%%%%%%%%% STANDARD PACKAGES %%%%%%%%%%%%%%%
 
@@ -35,6 +49,8 @@
 \usepackage{etoolbox}
 \usepackage{enumitem}
 \usepackage{lettrine}
+\usepackage{longtable}
+\usepackage{luacode}
 
 %%%%%%%%%%%%%%% HYPHENATION AND TYPOGRAPHICAL CONVENTIONS %%%%%%%%%%%%%%
 
@@ -136,9 +152,31 @@ headsep=3mm,
   \result%
 }%
 
-%% header capture setup for the mode
+%% header capture setup for the mode, with indexation of the score
+%% IMPORTANT NOTE: giving mode info is necessary for a score to be indexed.
+%% in this context, the mode may not be left blank in the gabc, as in: "mode:;",
+%% but must have some sort of text going on, as in: "mode:~;" which will produce the expected result
 \newcommand{\defaultannotationshift}{-2mm}
-\newcommand{\modeannotation}[1]{\greannotation{\hspace{\defaultannotationshift}#1}}
+\newcommand{\indexnamebuffer}{}
+\newcommand{\piecenamebuffer}{}
+\newcommand{\modeannotation}[1]{
+  \greannotation{\hspace{\defaultannotationshift}#1}
+  \ifblank{\piecenamebuffer}{}{% if the indexed name of the piece is not given, no indexation effort is made
+    \ifthenelse{\equal{I}{\indexnamebuffer}}{
+      \index[\indexnamebuffer]{{\piecenamebuffer}@#1 & \piecenamebuffer}
+    }{
+	  \ifthenelse{\equal{H}{\indexnamebuffer}}{
+        \index[\indexnamebuffer]{{\piecenamebuffer}@#1 & \piecenamebuffer}
+      }{
+	    \ifthenelse{\equal{A}{\indexnamebuffer}}{
+          \index[\indexnamebuffer]{{\piecenamebuffer}@#1 & \piecenamebuffer}
+        }{
+	      % if the piece is not among the given office_parts, no indexation effort is made
+        }
+      }
+    }
+  }
+}
 \gresetheadercapture{mode}{modeannotation}{string}
 
 %% outputs a score with no label, indexing, initials or annotations
@@ -152,6 +190,22 @@ headsep=3mm,
   \gresetinitiallines{1}
 }
 
+%% this removes instances of \newline from a string.
+%% used in order to allow new lines in the indexed name of a piece, 
+%% but not have those new lines in the \@currentlabelname for reference purposes
+\begin{luacode*}
+function delete_newline ( s )
+   s = string.gsub ( s, 'newline', '')
+   s = string.gsub ( s, 'hspace', '')
+   s = string.gsub ( s, '4mm', '')
+   s = string.gsub ( s, 'protect', '')
+   s = string.gsub ( s, 'hbox', '')
+   s = string.gsub ( s, [[\]], '')
+   s = string.gsub ( s, "{}", '')
+   tex.sprint ( s )
+end
+\end{luacode*}
+
 %% outputs a score with label, indexing, and annotations. no initials if [n] is passed
 \makeatletter
 \newcommand{\gscore}[5][y]{
@@ -163,7 +217,7 @@ headsep=3mm,
   
   %% this prevents page breaks between the phantom section and its label, and the actual score.
   \needspace{4\baselineskip} 
-  \protected@edef\@currentlabelname{#5}
+  \protected@edef\@currentlabelname{\directlua{delete_newline(\luastring{#5})}}
   \phantomsection
   \label{#2}
   %% we add the office part, and number of that ant. or resp. in the current office, if applicable
@@ -172,7 +226,26 @@ headsep=3mm,
   \greannotation[c]{\hspace{-1.4mm}\hspace{\defaultannotationshift}\officepartannotation{#3}#4}
   %% if #5 (indexed name) is blank, nothing is indexed.
   %% this is for pieces that are repetitions of another piece (antiphons after psalms)
-  \ifblank{#5}{}{\index[#3]{#5}}
+  \ifblank{#5}{
+    \renewcommand{\indexnamebuffer}{}
+    \renewcommand{\piecenamebuffer}{}
+  }{
+    \renewcommand{\indexnamebuffer}{#3}
+    \renewcommand{\piecenamebuffer}{#5}
+    \ifthenelse{\equal{I}{\indexnamebuffer}}{
+    % in this case, the mode is added to the index entry, and therefore indexation will be done by the header capture
+    }{
+      \ifthenelse{\equal{A}{\indexnamebuffer}}{
+      % in this case, the mode is added to the index entry, and therefore indexation will be done by the header capture
+      }{
+	    \ifthenelse{\equal{H}{\indexnamebuffer}}{
+        % in this case, the mode is added to the index entry, and therefore indexation will be done by the header capture
+        }{
+	      \index[#3]{#5}
+	    }
+	  }
+	}
+  }
   %% if optional arg #1 has been passed as 'n', set no initial
   \ifx n#1\gresetinitiallines{0}\fi
   %% the use of a directory called "gabc" is linked
@@ -285,6 +358,18 @@ headsep=3mm,
 
 %% Macro to print the common rubric that signals the Paschaltide three-psalm one-antiphon rule
 \newcommand{\tptresrubric}{\rubric{Tempore Paschali tres Psalmi sub hac Antiphona dicuntur.}}
+
+%% Macro to print a reference to a single Invitatory
+\newcommand{\invitref}[1]{\rubric{Invitatorium \scorename{#1}, pag.~\pageref{M-#1}.}}
+
+%% Macro to print the common rubric "invitatorium de feria"
+\newcommand{\invitferia}{\rubric{Invitatorium de Feria.}}
+
+%% Macros to print the common rubrics regarding feast solemnity
+\newcommand{\rubricsimplefeasts}{\rubric{Tonus simplex:}}
+\newcommand{\rubricdoublefeasts}{\rubric{Tonus festivus:}}
+\newcommand{\rubricsolemnfeasts}{\rubric{Tonus solemnis:}}
+\newcommand{\rubrictp}{\rubric{Tempore Paschali:}}
 
 %% Macro to print a separator
 
@@ -446,16 +531,14 @@ headsep=3mm,
 	\index[F]{\indexfeastname}
   }
   %% we typeset a two-column rank & rubrics block if one rank is filled in
-  \ifblank{#1}{}{%
-    \begin{parcolumns}[rulebetween]{2}
+  %% if the left rubric is filled in, we add a rule between the columns
+  \ifblank{#5}{\def\ourrule{}}{\def\ourrule{rulebetween}}
+  \ifblank{#1}{}{\vspace{-2mm}%
+    \begin{parcolumns}[\ourrule]{2}
 	\colchunk{%
-      {\centering\oldrank\par}%
-	  \ifblank{#4}{}{\rubric{\oldrubric}}
-	}
+      {\centering\oldrank\par}#4}%
 	\colchunk{%
-	  {\centering\newrank\par}%
-	  \ifblank{#5}{}{\rubric{\newrubric}}
-    }
+	  {\centering\newrank\par}#5}%
 	\end{parcolumns}
 	\vspace{2mm}
   }

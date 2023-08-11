@@ -1,0 +1,24 @@
+headings_flag 0
+preamble "\\section*{\\indexname}%
+\\thispagestyle{empty}
+\\pagestyle{fancy}
+\\begin{multicols}{2}
+\\makeatletter\\mysavecolroom=\\@colroom\\makeatother
+\\setbox\\ltmcbox\\vbox{
+\\footnotesize
+\\makeatletter\\col@number\\@ne\\makeatother
+\\setlength\\tabcolsep{2pt}
+\\setlength{\\parfillskip}{0pt}
+\\begin{longtable}[l]{@{}lp{4.95cm}@{}}\\ignoreNL"
+postamble "\n\\end{longtable}
+\\unskip
+\\unpenalty
+\\unpenalty}
+\\makeatletter\\@colroom=\\mysavecolroom\\makeatother
+\\unvbox\\ltmcbox
+\\end{multicols}
+"
+item_0 "\\\\\n "
+delim_0 " \\leavevmode\\kern3pt\\leaders\\hbox{. }\\hfill"
+delim_1 " "
+group_skip "\n"
