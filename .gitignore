@@ -11,3 +11,4 @@
 *.gaux
 *.synctex(busy)
 nocturnale-romanum/
+*__pycache__*
