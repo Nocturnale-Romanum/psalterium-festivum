@@ -1,7 +1,7 @@
 % !TEX TS-program = lualatex
 % !TEX encoding = UTF-8
 
-\documentclass[psalterium-dominicis.tex]{subfiles}
+\documentclass[psalterium-festivum.tex]{subfiles}
 
 \ifcsname preamble@file\endcsname
   \setcounter{page}{\getpagerefnumber{M-pd11_tempus_hiemalis}}
@@ -9,23 +9,19 @@
 
 \begin{document}
 
+\feast{PT}{Proprium de Tempore}{Proprium de Tempore}{Proprium de Tempore}{1}{}{}{}{}{}{}
+\addcontentsline{toc}{chapter}{Proprium de Tempore}
+
 \feast{1225}{In Nativitate\\Domini nostri Jesu Christi}
 	{Proprium de Tempore}{In Nativitate Domini}{1}{25 Decembris}
 	{}{}{Jesu Christi, Domini nostri!Nativitas}
 	{}
 	{}
-{\grechangedim{baselineskip}{62pt plus 1pt minus 5pt}{scalable}
-	\vspace{1\baselineskip}
-	\gscore{1225I}{I}{}{Christus natus est}
-	\vspace{1\baselineskip}
-	\gscore{1225H}{H}{}{Christe Redemptor\idxnewline(Nativitatis D.N.J.C.)}
-}
-\pagebreak
-\null
+\gscore{1225I}{I}{}{Christus natus est}
+\gscore{1225H}{H}{}{Christe Redemptor\idxnewline(Nativitatis D.N.J.C.)}
 \nocturn{1}
 \gscore{1225N1A1}{A}{1}{Dominus dixit ad me}
 \psalmus{2}{8}
-\pagebreak
 \gscore{1225N1A2}{A}{2}{Tamquam sponsus}
 \psalmus{18}{8}
 \gscore{1225N1A3}{A}{3}{Diffusa est gratia}
@@ -41,13 +37,10 @@
 \psalmus{84}{8}
 \versiculus{Speciósus forma præ filiis hóminum.}{Diffúsa est grátia in lábiis tuis.}
 
-\vspace{\baselineskip}
 \nocturn{3}
 \gscore{1225N3A1}{A}{7}{Ipse invocabit me alleluia}
 \psalmus{88}{6}
-{\grechangedim{baselineskip}{62pt plus 1pt minus 5pt}{scalable}
-	\gscore{1225N3A2}{A}{8}{Laetentur caeli}
-}
+\gscore{1225N3A2}{A}{8}{Laetentur caeli}
 \psalmus{95}{4e}
 \gscore{1225N3A3}{A}{9}{Notum fecit... salutare}
 \psalmus{97}{6}
@@ -59,7 +52,6 @@
 	{}
 	{}
 \rubric{Hymnus, Antiphonæ, Psalmi et Versus Nocturnorum de Communi unius Martyris, pag.\ \pageref{M-UMEX}. Invitatorium ut infra.}
-\pagebreak
 \gscore{1226I}{I}{}{Christum natum qui beatum}
 
 \feast{1227}{In Festo S. Joannis\\Apostoli et Evangelistæ}
@@ -274,51 +266,6 @@ Per Octavam dicitur \normaltext{Dómine lábia mea} et reliqua.}
 
 \pagebreak
 
-\feast{E2F1}{Dominicæ post Epiphaniam}
-	{Proprium de Tempore}{Dominicæ II usque IV post Epiphaniam}{2}{}
-	{}{}{}
-	{}
-	{}
-\thispagestyle{empty}
-\gscore{F1Iw}{I}{}{Adoremus Dominum}
-\gscore{F1Hw}{H}{}{Primo dierum omnium}
-\rubric{Antiphonæ, Psalmi et Versus Nocturnorum ut in Psalterio, pag.\ \pageref{M-F1N1A1}.}
-
-\feast{7GF1}{Dominicæ in Septuagesima, Sexagesima et Quinquagesima}
-	{Proprium de Tempore}{Dominicis in Septuagesima, Sexagesima et Quinquagesima}{2}{}
-	{}{}{}
-	{}
-	{}
-\thispagestyle{empty}
-\gscore{7GF1I}{I}{}{Praeoccupemus faciem}
-\rubric{In primo autem Psalmi versu omittitur: \normaltext{præoccupémus fáciem ejus in confessióne, et in psalmis jubilémus ei}; et repetitur a Choro Invitatorium.}
-
-\rubric{Hymnus \scorename{F1Hw}, ut supra. Antiphonæ, Psalmi et Versus Nocturnorum ut in Psalterio, pag.\ \pageref{M-F1N1A1}.}
-
-\feast{Q1F1}{Dominicæ Quadragesimæ}
-	{Proprium de Tempore}{Dominicæ in Quadragesima}{2}{}
-	{}{}{}
-	{}
-	{}
-\gscore{Q1I}{I}{}{Non sit vobis vanum}
-\gscore{Q1H}{H}{}{Ex more docti mystico}
-\rubric{Antiphonæ, Psalmi et Versus Nocturnorum ut in Psalterio, pag.\ \pageref{M-F1N1A1}.}
-
-
-\feast{Q5F1}{Dominica de Passione et Dominica in Palmis}
-	{Proprium de Tempore}{Tempus Passionis}{2}{}
-	{}{}{}
-	{}
-	{}
-\gscore{Q5I}{I}{}{Hodie si vocem}
-{
-\grechangedim{spaceabovelines}{5mm}{fixed}
-\gscore{Q5H}{H}{}{Pange lingua... Proelium}
-}
-\rubric{Antiphonæ, Psalmi et Versus Nocturnorum ut in Psalterio, pag.\ \pageref{M-F1N1A1}.}
-
-\pagebreak
-
 \feast{Q6F5}{Feria V in Cœna Domini}
 	{Proprium de Tempore}{Feria V in Cœna Domini}{2}{}
 	{}{}{}
@@ -422,7 +369,7 @@ Per Octavam dicitur \normaltext{Dómine lábia mea} et reliqua.}
 \nocturn{3}
 \gscore{Q6F7N3A1}{A}{7}{Deus adjuvat me}
 \psalmus{53}{8sgp}
-\pagebreak % todo check
+\pagebreak
 \gscore{Q6F7N3A2}{A}{8}{In pace factus est}
 \psalmus{75}{7sgp}
 \gscore{Q6F7N3A3}{A}{9}{Factus sum sicut homo}
